@@ -22,12 +22,16 @@ begin
         oebot.call(username,contents,id)
         oebot.being(username,contents,id)
         oebot.ping(username,contents,id)
+        oebot.esys_pinger(username,contents,id)
       end
 
     end
 
   sleep 2
   end
+rescue EventMachine::ConnectionError
+  puts Time.now
+  retry
 rescue Interrupt # ctrl + C
-exit 1
+  exit 1
 end

@@ -63,7 +63,7 @@ class Bot
     room = PCroom.new(2..91,timeout:5)
     time = Time.now.strftime("%H時%M分%S秒")
     if contents =~ /(計算機室|機室|きしつ)/ then
-      text = "@#{username} #{time}現在、\n#{room.count(:on)}台が稼働中です。"
+      text = "@#{username} #{time}現在、\n機室では#{room.count(:on)}台が稼働中です。"
       @client.update(text,{:in_reply_to_status_id => id})
       puts text
     end

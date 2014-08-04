@@ -29,8 +29,11 @@ begin
 
   sleep 2
   end
-rescue EventMachine::ConnectionError
+rescue => em
   puts Time.now
+  p em
+  puts ""
+  sleep 1800
   retry
 rescue Interrupt # ctrl + C
   exit 1

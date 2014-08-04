@@ -23,6 +23,7 @@ begin
         oebot.being(username,contents,id)
         oebot.ping(username,contents,id)
         oebot.esys_pinger(username,contents,id)
+        oebot.pan_gacha(username,contents,id)
       end
 
     end
@@ -32,7 +33,6 @@ begin
 rescue => em
   puts Time.now
   p em
-  puts ""
   sleep 1800
   retry
 rescue Interrupt # ctrl + C

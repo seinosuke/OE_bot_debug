@@ -3,6 +3,7 @@ require 'yaml'
 require 'twitter'
 require 'tweetstream'
 require './lib/esysPinger.rb'
+require './lib/gacha.rb'
 
 class Bot
   attr_accessor :client, :timeline, :keys
@@ -55,6 +56,16 @@ class Bot
         @client.update(text,{:in_reply_to_status_id => id})
         puts text
       end
+    end
+  end
+
+  # L棟パンガチャ (@open_esys)
+  def pan_gacha(username,contents,id)
+    if contents =~ /L棟(パン|ぱん)(ガチャ|がちゃ)/ then
+      pan = gacha()
+      text = "@#{username} 本日のL棟パンは#{pan}です。"
+      @client.update(text,{:in_reply_to_status_id => id})
+      puts text
     end
   end
 

@@ -1,7 +1,7 @@
 # coding:utf-8
-require './lib/bot.rb'
+require '../lib/bot.rb'
 
-oebot = Bot.new()
+oebot = Bot.new(true)
 begin
   oebot.timeline.userstream do |status|
 
@@ -14,16 +14,17 @@ begin
 
       # OEbotを呼び出す(他人へのリプを無視)
       if !(/^@\w*/.match(contents))
-        oebot.call(username,contents,id)
+        if contents =~ /(おーいー|oe|OE|openesys|OpenEsys|open_esys|Open_Esys)(_||\s)(BOT|Bot|bot|ボット|ﾎﾞｯﾄ|ぼっと)/
+          time = Time.now.strftime("%H時%M分%S秒")
+          text = oebot.function.call(time)
+          oebot.post(text,username,id)
+        end
       end
 
       # 自分へのリプであれば
       if contents =~ /^@open_esys\s*/ then
-        oebot.call(username,contents,id)
-        oebot.being(username,contents,id)
-        oebot.ping(username,contents,id)
-        oebot.esys_pinger(username,contents,id)
-        oebot.pan_gacha(username,contents,id)
+        text = Bot::Function.judge_keyword(contents)
+        oebot.post(text,username,id)
       end
 
     end

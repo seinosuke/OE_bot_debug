@@ -4,7 +4,7 @@ def gacha()
   pans = Array.new
   c = 0
   Random.new(Time.now.to_i)
-  open("./lib/pan_list.txt").each do |pan|
+  open("../list/pan_list.txt").each do |pan|
     pans << pan.to_s
   end
   pan =  pans[rand(pans.size - 1)]

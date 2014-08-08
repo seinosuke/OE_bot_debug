@@ -1,0 +1,38 @@
+#coding:utf-8
+
+color = {"黒" => 0,"茶" => 1,"赤" => 2,"橙" => 3,"黄" => 4,"緑" => 5,"青" => 6,"紫" => 7,"灰" => 8,"白" => 9}
+
+tes1 = "@open_esys 1ktΩ"
+tes2 = "@open_esys 黒赤黒"
+
+tes1.gsub!(/@open_esys\s/,"")
+tes1.gsub!(/(Ω|オーム|\s)/,"")
+tes1.gsub!(/(k|K|キロ)/,"000")
+tes1.gsub!(/(m|M|メガ)/,"000000")
+
+text = ""
+p tes1.to_i
+
+
+tes2.gsub!(/@open_esys\s/,"")
+tes2.gsub!(/(\s|,)/,"")
+
+# digit = tes2.split("")
+
+# ohm = 0.00
+# ohm += color[digit[0]] * 10
+# ohm += color[digit[1]]
+# ohm = ohm*(10**color[digit[2]])
+
+# digits_num = ohm.to_s.length - 2
+# puts ohm
+
+# if digits_num >= 4 && digits_num < 7
+#   ohm = ohm/1000
+#   puts "#{ohm}kΩ"
+# elsif digits_num >= 7
+#   ohm = ohm/1000000
+#   puts "#{ohm}MΩ"
+# else
+#   puts "#{ohm}Ω"
+# end

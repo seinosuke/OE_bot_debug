@@ -1,6 +1,6 @@
 # coding:utf-8
-require './lib/bot.rb'
-require './lib/card.rb'
+require '../lib/bot.rb'
+require '../lib/card.rb'
 
 oebot = Bot.new()
 card = Card.new()
@@ -16,7 +16,7 @@ loop do
     if input == "y" || input == "Y" then
       puts "ฅ(๑'Δ'๑) カードを置いてください。"
       # カードを読むまで諦めない
-      num = idnum()
+      num = Card.idnum()
       # members.csv にないIDが読み込まれた場合guest(数字)と表示される
       if card.hash(num).nil? then
         card.reload_guest(num,"guest(#{i})")
@@ -26,11 +26,14 @@ loop do
       list << card.hash(num)
       # 重複した人物は退室
       leaver = list.uniq.select{|i| list.index(i) != list.rindex(i)}
+      time = Time.now.strftime("%H時%M分%S秒")
       if !(leaver.empty?) then
         list = list - leaver
-        oebot.out(list,leaver)
+        text = oebot.function.out(list,leaver,time)
+        oebot.post(text,nil,nil)
       else
-        oebot.in(list,card.hash(num))
+        text = oebot.function.in(list,card.hash(num),time)
+        oebot.post(text,nil,nil)
       end
       sleep 3
 
@@ -38,8 +41,8 @@ loop do
       print "ฅ(๑'Δ'๑) 名前を入力してください："
       name = gets.chomp!.to_s
       puts "ฅ(๑'Δ'๑) カードを置いてください"
-      id_num = idnum()
-      file_name = "./list/members.csv"
+      id_num = Card.idnum()
+      file_name = "../list/members.csv"
       new_member = "#{id_num},#{name}\n"
       entry = File.open(file_name,"a")
       entry.write(new_member)

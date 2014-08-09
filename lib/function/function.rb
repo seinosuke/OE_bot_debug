@@ -29,6 +29,8 @@ class Bot
         return function.thank_2()
       elsif contents =~ /(本当|ほんと|ホント|嘘|ウソ|うそ)/ then
         return function.pack()
+      else # どのキーワードにも当てはまらなかったら
+        return "#{time}現在、私にそのような機能はありません。"
       end
     end
 

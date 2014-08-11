@@ -80,7 +80,7 @@ class Bot
     # 抵抗値 -> カラーコード(@open_esys)
     def color_encode(contents)
       contents = contents.gsub(/@open_esys\s/,"")
-      contents = contents.gsub(/(Ω|オーム|\s)/,"")
+      contents = contents.gsub(/(Ω|オーム|\s|　)/,"")
       text = c_encode(contents)
       return text
     end

@@ -26,7 +26,7 @@ loop do
       list << card.hash(num)
       # 重複した人物は退室
       leaver = list.uniq.select{|i| list.index(i) != list.rindex(i)}
-      time = Time.now.strftime("%H時%M分%S秒")
+      time = Time.now.strftime("[%Y-%m-%d %H:%M]")
       if !(leaver.empty?) then
         list = list - leaver
         text = oebot.function.out(list,leaver,time)

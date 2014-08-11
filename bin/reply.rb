@@ -15,7 +15,7 @@ begin
       # OEbotを呼び出す(他人へのリプを無視)
       if !(/^@\w*/.match(contents))
         if contents =~ /(おーいー|oe|OE|openesys|OpenEsys|open_esys|Open_Esys)(_||\s)(BOT|Bot|bot|ボット|ﾎﾞｯﾄ|ぼっと)/
-          time = Time.now.strftime("%H時%M分%S秒")
+          time = Time.now.strftime("[%Y-%m-%d %H:%M]")
           text = oebot.function.call(time)
           oebot.post(text,username,id)
         end

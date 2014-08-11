@@ -8,27 +8,28 @@ class Bot
 
     def Function::judge_keyword(contents)
       function = new
-      time = Time.now.strftime("%H時%M分%S秒")
+      time = Time.now.strftime("[%Y-%m-%d %H:%M]")
+      time_s = Time.now.strftime("%H時%M分%S秒")
       if contents =~ /(おーいー|oe|OE|openesys|OpenEsys|open_esys|Open_Esys)(_||\s)(BOT|Bot|bot|ボット|ﾎﾞｯﾄ|ぼっと)/ then
         return function.call(time)
       elsif contents =~ /(誰か|だれか|誰が|だれが)/ then
-        return function.being(time)
+        return function.being(time_s)
       elsif contents =~ /(ping|Ping|PING)/ then
         return function.ping(time)
       elsif contents =~ /(計算機室|機室|きしつ)/ then
-        return function.esys_pinger(time)
+        return function.esys_pinger(time_s)
       elsif contents =~ /L棟(パン|ぱん)(ガチャ|がちゃ)/ then
-        return function.pan_gacha()
+        return function.pan_gacha(time)
       elsif contents =~ /(Ω|オーム)/ then
         return function.color_encode(contents)
       elsif contents =~ /(黒|茶|赤|橙|黄|緑|青|紫|灰|白)/ then
         return function.color_decode(contents)
       elsif contents =~ /(ありがと|あざす)/ then
-        return function.thank_1()
+        return function.thank_1(time)
       elsif contents =~ /(Thank|thank)/ then
-        return function.thank_2()
+        return function.thank_2(time)
       elsif contents =~ /(本当|ほんと|ホント|嘘|ウソ|うそ)/ then
-        return function.pack()
+        return function.pack(time)
       else # どのキーワードにも当てはまらなかったら
         return "#{time}現在、私にそのような機能はありません。"
       end
@@ -41,7 +42,7 @@ class Bot
     end
 
     # 現状を尋ねる(@open_esys)
-    def being(time)
+    def being(time_s)
       members = ""
       File.open("../list/be_in.txt") do |io|
         io.each do |line|
@@ -52,7 +53,7 @@ class Bot
         text = "\n#{time}現在、室内には\n#{members}\nがいます。"
         return text
       else
-        text = "#{time}現在、室内には誰もいません。"
+        text = "#{time_s}現在、室内には誰もいません。"
         return text
       end
     end
@@ -64,16 +65,16 @@ class Bot
     end
 
     # esysPinger (@open_esys)
-    def esys_pinger(time)
+    def esys_pinger(time_s)
       room = PCroom.new(2..91,timeout:5)
-      text = "#{time}現在、\n機室では#{room.count(:on)}台が稼働中です。"
+      text = "#{time_s}現在、\n機室では#{room.count(:on)}台が稼働中です。"
       return text
     end
 
     # L棟パンガチャ (@open_esys)
-    def pan_gacha()
+    def pan_gacha(time)
       pan = gacha()
-      text = "本日のL棟パンは#{pan}です。"
+      text = "本日のL棟パンは#{pan}です。\n#{time}"
       return text
     end
 
@@ -94,26 +95,26 @@ class Bot
     end
 
     # どういたしまして(@open_esys)
-    def thank_1()
-      text = "どういたしまして"
+    def thank_1(time)
+      text = "どういたしまして\n#{time}"
       return text
     end
 
     # You’re welcome.(@open_esys)
-    def thank_2()
-      text = "You’re welcome."
+    def thank_2(time)
+      text = "You’re welcome.\n#{time}"
       return text
     end
 
     # ほんとです(@open_esys)
-    def pack()
-      text = "パックは嘘を申しません。"
+    def pack(time)
+      text = "パックは嘘を申しません。\n#{time}"
       return text
     end
 
     # 退室
     def out(list,leaver,time)
-      text = "#{time}\n#{leaver[0]}が退室しました。"
+      text = "#{leaver[0]}が退室しました。\n#{time}"
       members = ""
       list.each{ |member|
         members += (member) + ","
@@ -125,7 +126,7 @@ class Bot
 
     # 入室
     def in(list,newcomer,time)
-      text = "#{time}\n#{newcomer}が入室しました。"
+      text = "#{newcomer}が入室しました。\n#{time}"
       members = ""
       list.each{ |member|
         members += (member) + ","

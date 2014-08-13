@@ -19,7 +19,7 @@ class Bot
       elsif contents =~ /(計算機室|機室|きしつ)/ then
         return function.esys_pinger(time_s)
       elsif contents =~ /L棟(パン|ぱん)(ガチャ|がちゃ)/ then
-        return function.pan_gacha(time)
+        return function.ltou_gacha(time)
       elsif contents =~ /(Ω|オーム)/ then
         return function.color_encode(contents)
       elsif contents =~ /(黒|茶|赤|橙|黄|緑|青|紫|灰|白)/ then
@@ -72,9 +72,10 @@ class Bot
     end
 
     # L棟パンガチャ (@open_esys)
-    def pan_gacha(time)
-      pan = gacha()
-      text = "本日のL棟パンは#{pan}です。\n#{time}"
+    def ltou_gacha(time)
+      gacha = Gacha.new()
+      bun = gacha.buns_gacha()
+      text = "本日のL棟パンは#{bun}です。\n#{time}"
       return text
     end
 

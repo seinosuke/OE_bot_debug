@@ -32,7 +32,7 @@ def c_encode(ohm_str)
     ans[3] = ""
   # 指定されていてもそれがrangeの値にないものだったら
   elsif !range.key(ohm[1])
-    ans[3] = false
+    ans[3] = ""
   else
     ans[3] = range.key(ohm[1])
   end
@@ -64,7 +64,8 @@ def c_encode(ohm_str)
       return "#{ans[0]}#{ans[1]}#{ans[2]}#{ans[3]}"
     end
   else
-    return "error"
+    time = Time.now.strftime("[%Y-%m-%d %H:%M]")
+    return "errorです。\n#{time}"
   end
 
 end
@@ -130,7 +131,8 @@ def c_decode(code)
       return "#{ohm}Ω #{range_str}"
     end
   else
-    return "error"
+    time = Time.now.strftime("[%Y-%m-%d %H:%M]")
+    return "errorです。\n#{time}"
   end
 
 end

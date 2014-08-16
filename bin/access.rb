@@ -47,11 +47,11 @@ loop do
       entry = File.open(file_name,"a")
       entry.write(new_member)
       entry.close
-      puts "(๑¯Δ¯๑)/ 登録が完了しました!\n"
+      puts "(๑¯Δ¯๑)/ 登録が完了しました!\n\n"
       sleep 3
 
     else
-      puts "(๑¯Δ¯๑)/ もういちど入力してください。\n"
+      puts "(๑¯Δ¯๑)/ もういちど入力してください。\n\n"
       redo
     end
     input = ""

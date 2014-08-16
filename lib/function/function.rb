@@ -9,29 +9,29 @@ class Bot
     def Function::judge_keyword(contents)
       function = new
       time = Time.now.strftime("[%Y-%m-%d %H:%M]")
-      time_s = Time.now.strftime("%H時%M分%S秒")
+      # time_s = Time.now.strftime("%H時%M分%S秒")
       if contents =~ /(おーいー|oe|OE|openesys|OpenEsys|open_esys|Open_Esys)(_||\s)(BOT|Bot|bot|ボット|ﾎﾞｯﾄ|ぼっと)/ then
         return function.call(time)
-      elsif contents =~ /(誰か|だれか|誰が|だれが)/ then
-        return function.being(time_s)
+      elsif contents =~ /(誰か|だれか|誰が|だれが|おるか)/ then
+        return function.being(time)
       elsif contents =~ /(ping|Ping|PING)/ then
         return function.ping(time)
       elsif contents =~ /(計算機室|機室|きしつ)/ then
-        return function.esys_pinger(time_s)
+        return function.esys_pinger(time)
       elsif contents =~ /L棟(パン|ぱん)(ガチャ|がちゃ)/ then
         return function.ltou_gacha(time)
       elsif contents =~ /(Ω|オーム)/ then
         return function.color_encode(contents)
       elsif contents =~ /(黒|茶|赤|橙|黄|緑|青|紫|灰|白)/ then
         return function.color_decode(contents)
-      elsif contents =~ /(ありがと|あざす)/ then
+      elsif contents =~ /(ありがと|あざす|サンクス)/ then
         return function.thank_1(time)
       elsif contents =~ /(Thank|thank)/ then
         return function.thank_2(time)
       elsif contents =~ /(本当|ほんと|ホント|嘘|ウソ|うそ)/ then
         return function.pack(time)
       else # どのキーワードにも当てはまらなかったら
-        return "#{time}現在、私にそのような機能はありません。"
+        return "どう返してよいかわかりません。\n#{time}"
       end
     end
 
@@ -42,7 +42,7 @@ class Bot
     end
 
     # 現状を尋ねる(@open_esys)
-    def being(time_s)
+    def being(time)
       members = ""
       File.open("../list/be_in.txt") do |io|
         io.each do |line|
@@ -50,10 +50,10 @@ class Bot
         end
       end
       if !(members.empty?) then
-        text = "\n#{time}現在、室内には\n#{members}\nがいます。"
+        text = "\n室内には\n#{members} がいます。\n#{time}"
         return text
       else
-        text = "#{time_s}現在、室内には誰もいません。"
+        text = "\n室内には誰もいません。\n#{time}"
         return text
       end
     end
@@ -65,9 +65,9 @@ class Bot
     end
 
     # esysPinger (@open_esys)
-    def esys_pinger(time_s)
+    def esys_pinger(time)
       room = PCroom.new(2..91,timeout:5)
-      text = "#{time_s}現在、\n機室では#{room.count(:on)}台が稼働中です。"
+      text = "\n機室では#{room.count(:on)}台が稼働中です。\n#{time}"
       return text
     end
 
@@ -97,7 +97,7 @@ class Bot
 
     # どういたしまして(@open_esys)
     def thank_1(time)
-      text = "どういたしまして\n#{time}"
+      text = "どういたしまして。\n#{time}"
       return text
     end
 

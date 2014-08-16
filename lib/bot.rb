@@ -37,9 +37,11 @@ class Bot
       rep_text = "@#{username} #{text}"
       @client.update(rep_text,{:in_reply_to_status_id => id})
       puts rep_text
+      puts ""
     else
       @client.update(text)
       puts text
+      puts ""
     end
   end
 

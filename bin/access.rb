@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # coding:utf-8
 require '../lib/bot.rb'
 require '../lib/card.rb'
@@ -8,10 +9,35 @@ list = Array.new()
 i = 0
 input = ""
 
-loop do
-  begin
+mode = ARGV[0]
+debug = false
+if mode == "debug"
+  debug = true
+  puts "debugモードです"
+end
+
+# 朝６時になったら部屋にいる人をクリアする
+clear = Thread.new() do
+  loop do
+    now = Time.now.strftime("%H")
+    if now == "06"
+      time = Time.now.strftime("[%Y-%m-%d %H:%M]")
+      File.write("../list/be_in.txt",nil)
+      list = []
+      puts ""
+      text = "在室情報をリセットしました。\n#{time}"
+      oebot.post(text,nil,nil,debug)
+      print "ฅ(๑'Δ'๑) あなたは既に登録されてますか(y/n)? :"
+    end
+    sleep 3600
+  end
+end
+
+card.reload # members.csv から
+begin
+  loop do
     print "ฅ(๑'Δ'๑) あなたは既に登録されてますか(y/n)? :"
-    input = gets.to_s.chomp
+    input = STDIN.gets.to_s.chomp
 
     if input == "y" || input == "Y" then
       puts "ฅ(๑'Δ'๑) カードを置いてください。"
@@ -22,7 +48,6 @@ loop do
         card.reload_guest(num,"guest(#{i})")
         i += 1
       end
-      card.reload # members.csv から
       list << card.hash(num)
       # 重複した人物は退室
       leaver = list.uniq.select{|i| list.index(i) != list.rindex(i)}
@@ -30,16 +55,16 @@ loop do
       if !(leaver.empty?) then
         list = list - leaver
         text = oebot.function.out(list,leaver,time)
-        oebot.post(text,nil,nil)
+        oebot.post(text,nil,nil,debug)
       else
         text = oebot.function.in(list,card.hash(num),time)
-        oebot.post(text,nil,nil)
+        oebot.post(text,nil,nil,debug)
       end
       sleep 3
 
     elsif input == "n" || input == "N" then
       print "ฅ(๑'Δ'๑) 名前を入力してください："
-      name = gets.chomp!.to_s
+      name = STDIN.gets.chomp!.to_s
       puts "ฅ(๑'Δ'๑) カードを置いてください"
       id_num = Card.idnum()
       file_name = "../list/members.csv"
@@ -48,19 +73,23 @@ loop do
       entry.write(new_member)
       entry.close
       puts "(๑¯Δ¯๑)/ 登録が完了しました!\n\n"
+      card.reload # members.csv から
       sleep 3
 
     else
       puts "(๑¯Δ¯๑)/ もういちど入力してください。\n\n"
       redo
     end
-    input = ""
 
-  rescue Interrupt # ctrl + C
-    exit 1
-  rescue => em
-    p em
-    sleep 3
-    retry
+    input = ""
   end
+
+rescue Interrupt # ctrl + C
+  exit 1
+rescue => em
+  p em
+  sleep 3
+  retry
 end
+
+clear.join

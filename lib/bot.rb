@@ -32,16 +32,23 @@ class Bot
 
   end
 
-  def post(text,username,id = nil)
-    if id
-      rep_text = "@#{username} #{text}"
-      @client.update(rep_text,{:in_reply_to_status_id => id})
-      puts rep_text
-      puts ""
+  def post(text,username,id = nil,debug = false)
+    if debug
+      if id
+        rep_text = "@#{username} #{text}"
+        puts "#{rep_text}\n\n"
+      else
+        puts "#{text}\n\n"
+      end
     else
-      @client.update(text)
-      puts text
-      puts ""
+      if id
+        rep_text = "@#{username} #{text}"
+        @client.update(rep_text,{:in_reply_to_status_id => id})
+        puts "#{rep_text}\n\n"
+      else
+        @client.update(text)
+        puts "#{text}\n\n"
+      end
     end
   end
 

@@ -1,4 +1,4 @@
-# @open_esys OEbot
+# OEbot [@open\_esys](https://twitter.com/open_esys)   
 
 ## 召喚の呪文   
 　例：OE_bot、OpenEsysBot、おーいーぼっと、など   

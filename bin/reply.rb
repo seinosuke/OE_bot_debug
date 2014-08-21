@@ -1,7 +1,15 @@
+#!/usr/bin/env ruby
 # coding:utf-8
 require '../lib/bot.rb'
 
 oebot = Bot.new(true)
+mode = ARGV[0]
+debug = false
+if mode == "debug"
+  debug = true
+  puts "debugモードです"
+end
+
 begin
   oebot.timeline.userstream do |status|
 
@@ -17,14 +25,14 @@ begin
         if contents =~ /(おーいー|oe|OE|openesys|OpenEsys|open_esys|Open_Esys)(_||\s)(BOT|Bot|bot|ボット|ﾎﾞｯﾄ|ぼっと)/
           time = Time.now.strftime("[%Y-%m-%d %H:%M]")
           text = oebot.function.call(time)
-          oebot.post(text,username,id)
+          oebot.post(text,username,id,debug)
         end
       end
 
       # 自分へのリプであれば
       if contents =~ /^@open_esys\s*/ then
-        text = Bot::Function.judge_keyword(contents)
-        oebot.post(text,username,id)
+        text = Bot::Function.generate_reply(contents)
+        oebot.post(text,username,id,debug)
       end
 
     end

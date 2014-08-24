@@ -4,6 +4,8 @@ require_relative "./gacha.rb"
 require_relative "./color_code.rb"
 require_relative "./talk.rb"
 
+$okaeri = ["okaeri1.wav","okaeri2.wav","okaeri3.wav","okaeri4.wav"]
+
 class Bot
   class Function
 
@@ -99,6 +101,8 @@ class Bot
     # 退室
     def out(list,leaver,time)
       text = "#{leaver[0]}が退室しました。\n#{time}"
+      command = "paplay ./voice/nyanpass.wav"
+      system(command)
       members = ""
       list.each{ |member|
         members += (member) + ","
@@ -110,6 +114,8 @@ class Bot
     # 入室
     def in(list,newcomer,time)
       text = "#{newcomer}が入室しました。\n#{time}"
+      command = "paplay ./voice/#{$okaeri.sample}"
+      system(command)
       members = ""
       list.each{ |member|
         members += (member) + ","

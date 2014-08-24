@@ -23,7 +23,7 @@ class Bot
         return function.ltou_gacha(time)
       elsif contents =~ /(Ω|オーム)/ then
         return function.color_encode(contents)
-      elsif contents =~ /(黒|茶|赤|橙|黄|緑|青|紫|灰|白)/ then
+      elsif contents =~ /(黒|茶|赤|橙|黄|緑|青|紫|灰|白|金|銀)/ then
         return function.color_decode(contents)
       else # どのキーワードにも当てはまらなかったら
         return function.conversation(contents,time)

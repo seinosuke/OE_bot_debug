@@ -50,6 +50,16 @@ class Bot
         puts "#{text}\n\n"
       end
     end
+  rescue => em
+    puts "post error #{em}"
+  end
+
+  def fav(id = nil)
+    if id
+      @client.favorite(id)
+    end
+  rescue => em
+    puts "fav error #{em}"
   end
 
 end

@@ -14,6 +14,7 @@ begin
   oebot.timeline.userstream do |status|
 
     username = status.user.screen_name
+    name = status.user.name
     contents = status.text
     id = status.id
 
@@ -26,6 +27,7 @@ begin
           time = Time.now.strftime("[%Y-%m-%d %H:%M]")
           text = oebot.function.call(time)
           oebot.post(text,username,id,debug)
+          oebot.fav(id)
         end
       end
 

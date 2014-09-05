@@ -5,10 +5,9 @@ require '../lib/bot.rb'
 
 begin
   loop do
-    print "\n:"
+    print "\n> @open_esys "
     contents = gets.to_s.chomp
     contents = "@open_esys #{contents}"
-    puts "> #{contents}"
     text = Bot::Function.generate_reply(contents)
     puts "> @test #{text}"
   end

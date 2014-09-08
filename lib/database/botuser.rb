@@ -26,7 +26,7 @@ class BotUser
     p em
   end
 
-  # userのidによって、在室か否かを返す
+  # userが在室であるか否かを返す
   def staytus?
     Condition.where(:user_id => @id).first_or_create do |c|
       c.staytus = false
@@ -40,7 +40,7 @@ class BotUser
     p em
   end
 
-  # 渡されたidの人を在室状態にする
+  # userを在室状態にする
   def entrance(time = nil)
     @user.condition.staytus = true
     @user.condition.entrance_time = time
@@ -51,7 +51,7 @@ class BotUser
     p em
   end
 
-  # 渡されたidの人を不在状態にし、訪問回数を加算する
+  # userを不在状態にし、訪問回数を加算する
   def exit(time = nil)
     @user.condition.staytus = false
     @user.condition.exit_time = time

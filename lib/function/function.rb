@@ -53,7 +53,7 @@ class Function
     return text
   end
 
-  # 現状を尋ねる
+  # ダレカオルカ
   def being()
     members = ""
 

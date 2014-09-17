@@ -2,7 +2,7 @@
 
 def talk(contents)
   # 挨拶
-  if contents =~ /(ありがと|さんくす|Thank)/
+  if contents =~ /(ありがと|さんくす|Thank|thank|thx|Thx)/
     return "どういたしまして。"
   elsif contents =~ /(ただいま|きたく|帰宅)/
     return "おかえりなさい。"
@@ -44,7 +44,12 @@ def talk(contents)
     return "https://github.com/TKB-AEM/OE_bot/blob/master/README.md"
 
   else
-    wakaran = ["どう返してよいかわかりません。","そんなこと言わないでください。","その言葉はまだ理解できません。","\n✌(’ω’)｡o(????????????)","\n（ ˘⊖˘）。o(何言ってるんだこの人)"]
+    wakaran = ["どう返してよいかわかりません。",
+               "そんなこと言わないでください。",
+               "その言葉はまだ理解できません。",
+               "\n✌(’ω’)｡o(????????????)",
+               "\n（ ˘⊖˘）。o(何言ってるんだこの人)",
+               "\nわかります。（わからない顔）"]
     return wakaran.sample
   end
 end

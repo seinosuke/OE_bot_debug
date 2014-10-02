@@ -5,50 +5,36 @@ require_relative "./function/function.rb"
 
 class Card
 
-  def Card::idnum
-    card = new
-    counts = 0
+  attr_accessor :pasori , :felica
 
-    loop do
-      begin
-        Pasori.open {|pasori|
-          pasori.felica_polling {|felica|
-            system = felica.request_system
-            return card.dump_system_info(pasori, system)
-          }
-        }
-        break
-
-      rescue PasoriError
-        sleep 2
-      end
-
-    end
+  def initialize
+    @pasori = Pasori.open
+  rescue PasoriError
+    sleep 3
+    retry
   end
 
-  def dump_id(felica)
-    return felica.idm.unpack("C*").map{|c| sprintf("%02X", c)}.join
-  end
-
-  private :dump_id
-
-  def dump_system_info(pasori, system)
-    pasori.felica_polling(system[0]) {|felica|
-      return dump_id(felica)
-    }
+  # カードのIDを返す
+  def idnum
+    @felica = @pasori.felica_polling(Felica::POLLING_ANY)
+    idm = @felica.idm.unpack("C*").map{|c| sprintf("%02X",c)}.join.to_s
+    return idm
+    @felica.close
+    @pasori.close
+  rescue PasoriError
+    sleep 3
+    retry
   end
 
   # カードのIDを渡すとユーザーのidを返す
-  def check(card_id = "")
+  def user_id(card_id = "")
     user = User.find_by_card_id(card_id)
-
     if !(user)
       return false
     else
       id = user.id
       return id
     end
-
   end
 
 end

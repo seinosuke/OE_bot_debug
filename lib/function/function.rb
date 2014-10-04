@@ -54,7 +54,7 @@ class Function
   # OEbotを呼び出す
   def call(contents)
     text = nil
-    text = "はい。" if contents =~ /^(oe|おーいー)(_||\s)(bot|ボット|ﾎﾞｯﾄ|ぼっと)$/
+    text = "はい。" if contents =~ /^(oe|おーいー)(_||\s)(bot|ボット|ﾎﾞｯﾄ|ぼっと)$/i
     return text
   end
 

@@ -27,7 +27,7 @@ begin
 
       # OEbotを呼び出す(他人へのリプを無視)
       if !(/^@\w*/.match(contents))
-        if contents =~ /(おーいー|oe|OE)(_||\s)(BOT|Bot|bot|ボット|ﾎﾞｯﾄ|ぼっと)/
+        if contents =~ /(oe|おーいー)(_||\s)(bot|ボット|ﾎﾞｯﾄ|ぼっと)/
           rep_text = function.call(contents)
           oebot.post(rep_text,twitter_id:twitter_id,status_id:status_id,debug:debug) if rep_text
           oebot.fav(status_id:status_id)

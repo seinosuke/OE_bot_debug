@@ -23,7 +23,7 @@ def to_entry(oebot,card_id,debug)
   puts "(๑¯Δ¯๑)/ 登録が完了しました!"
   command = "paplay ./voice/entry.wav"
   system(command)
-  rep_text = "ようこそ、#{name}さん!"
+  rep_text = "ようこそ、#{name}さん!フォローにはしばらく時間がかかることがあるかもです。"
   oebot.post(rep_text,twitter_id:twitter_id,debug:debug)
 end
 

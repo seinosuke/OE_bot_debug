@@ -1,58 +1,64 @@
 #coding:utf-8
 
 def talk(contents)
-  # 挨拶
-  if contents =~ /(ありがと|さんくす|Thank|thank|thx|Thx)/
-    return "どういたしまして。"
-  elsif contents =~ /(ただいま|きたく|帰宅)/
-    return "おかえりなさい。"
-  elsif contents =~ /(こんばんは|こんばんわ)/
-    return "こんばんは。"
-  elsif contents =~ /こんにちは/
-    return "こんにちは。"
-  elsif contents =~ /(おはよ|おきた|起きた)/
-    return "おはようございます。"
-  elsif contents =~ /(おやすみ|寝る|ねる|寝ます|ねます)/
-    return "おやすみなさい。"
 
-  # 返答
-  elsif contents =~ /(本当|ホント|ほんとう|うそ|嘘)/
-    return "パックは嘘を申しません。"
-  elsif contents =~ /(Yo|yo|YO)/
-    return "Yo!"
-  elsif contents =~ /(ちっぱい|貧乳|ひんぬー|ひんにゅう)/
-    return "フラットデザインです。"
-  elsif contents =~ /おっぱい/
-    return "そんなにおっぱいが好きなんですか。"
-  elsif contents =~ /わかる/
-    return "わかられました。"
-  elsif contents =~ /それな/
-    return "せやなです。"
-  elsif contents =~ /せやな/
-    return "それなです。"
+  rep_text = case contents
+    # 挨拶
+    when /(ありがと|さんくす|Thank|thank|thx|Thx)/
+      "どういたしまして。"
+    when /(ただいま|きたく|帰宅)/
+      "おかえりなさい。"
+    when /(こんばんは|こんばんわ)/
+      "こんばんは。"
+    when /こんにちは/
+      "こんにちは。"
+    when /(おはよ|おきた|起きた)/
+      "おはようございます。"
+    when /(おやすみ|寝る|ねる|寝ます|ねます)/
+      "おやすみなさい。"
 
-  # その他
-  elsif contents =~ /入室/
-    return "部屋にきてください。"
-  elsif contents =~ /リア充/
-    return "みんな離れろ！リア充が爆発するぞ！"
-  elsif contents =~ /(ようじょ|幼女)/
-    return "私です。"
-  elsif contents =~ /(進捗|しんちょく)/
-    return "進捗どうですか。"
+    # 返答
+    when /(oe|おーいー)(_||\s)(bot|ボット|ﾎﾞｯﾄ|ぼっと)/i
+      "はい。"
+    when /(本当|ホント|ほんとう|うそ|嘘)/
+      "パックは嘘を申しません。"
+    when /(Yo|yo|YO)/
+      "Yo!"
+    when /(ちっぱい|貧乳|ひんぬー|ひんにゅう)/
+      "フラットデザインです。"
+    when /おっぱい/
+      "そんなにおっぱいが好きなんですか。"
+    when /わかる/
+      "わかられました。"
+    when /それな/
+      "せやなです。"
+    when /せやな/
+      "それなです。"
 
-  elsif contents =~ /機能/
-    return "https://github.com/TKB-AEM/OE_bot/blob/master/README.md"
-  elsif contents =~ /(help|ヘルプ)/
-    return "\n「おるか」--在室情報\n「記録」----これまでの記録\n「退室」----退室処理\n「機室」----機室で起動中のPC\n「機能」----機能詳細ページ"
+    # その他
+    when /入室/
+      "部屋にきてください。"
+    when /リア充/
+      "みんな離れろ！リア充が爆発するぞ！"
+    when /(ようじょ|幼女)/
+      "私です。"
+    when /(進捗|しんちょく)/
+      "進捗どうですか。"
 
-  else
-    wakaran = ["どう返してよいかわかりません。",
-               "そんなこと言わないでください。",
-               "その言葉はまだ理解できません。",
-               "\n✌(’ω’)｡o(????????????)",
-               "\n（ ˘⊖˘）。o(何言ってるんだこの人)",
-               "\nわかります。（わからない顔）"]
-    return wakaran.sample
-  end
+    when /機能/
+      "https://github.com/TKB-AEM/OE_bot/blob/master/README.md"
+    when /(help|ヘルプ)/
+      "\n「おるか」--在室情報\n「記録」----これまでの記録\n「退室」----退室処理\n「機室」----機室で起動中のPC\n「機能」----機能詳細ページ"
+
+    else
+      wakaran = ["どう返してよいかわかりません。",
+                 "そんなこと言わないでください。",
+                 "その言葉はまだ理解できません。",
+                 "\n✌(’ω’)｡o(????????????)",
+                 "\n（ ˘⊖˘）。o(何言ってるんだこの人)",
+                 "\nわかります。（わからない顔）"]
+      wakaran.sample
+    end
+
+  return rep_text
 end

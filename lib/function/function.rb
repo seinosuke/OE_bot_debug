@@ -9,48 +9,35 @@ require_relative "./talk.rb"
 require_relative "../database/botuser.rb"
 require_relative "../bot.rb"
 
-$okaeri = ["okaeri1.wav","okaeri2.wav","okaeri3.wav","okaeri4.wav"]
 PostError = Class.new(StandardError)
 
 class Function
 
   def Function::generate_reply(contents = "",twitter_id:nil,debug:nil)
     function = new
-    rep_text = ""
 
-    if contents =~ /^@\w*(\s|　)(おーいー|oe|OE)(_||\s)(BOT|Bot|bot|ボット|ﾎﾞｯﾄ|ぼっと)$/
-      rep_text = "はい。"
-
-    elsif contents =~ /(誰か|だれか|誰が|だれが|おるか)/
-      rep_text = function.being()
-
-    elsif contents =~ /(記録|きろく)/
-      rep_text = function.record(twitter_id:twitter_id)
-
-    elsif contents =~ /(退室|たいしつ|退出|たいしゅつ)/
-      rep_text = function.rep_exit(twitter_id:twitter_id,debug:debug)
-
-    elsif contents =~ /(ping|Ping|PING)/
-      rep_text = function.ping()
-
-    elsif contents =~ /(計算機室|機室|きしつ)/
-      rep_text = function.esys_pinger()
-
-    elsif contents =~ /L棟(パン|ぱん)(ガチャ|がちゃ)/
-      rep_text = function.ltou_gacha()
-
-    elsif contents =~ /(say|Say|って言って|っていって)/
-      rep_text = function.say(contents)
-
-    elsif contents =~ /(Ω|オーム)/
-      rep_text = function.color_encode(contents)
-
-    elsif contents =~ /(黒|茶|赤|橙|黄|緑|青|紫|灰|白|金|銀)/
-      rep_text = function.color_decode(contents)
-
-    else # どのキーワードにも当てはまらなかったら
-      rep_text = function.conversation(contents)
-    end
+    rep_text = case contents
+      when /(誰か|だれか|誰が|だれが|おるか)/
+        function.being()
+      when /(記録|きろく)/
+        function.record(twitter_id:twitter_id)
+      when /(退室|たいしつ|退出|たいしゅつ)/
+        function.rep_exit(twitter_id:twitter_id,debug:debug)
+      when /ping/i
+        function.ping()
+      when /(計算機室|機室|きしつ)/
+        function.esys_pinger()
+      when /L棟(パン|ぱん)(ガチャ|がちゃ)/
+        function.ltou_gacha()
+      when /(say|って言って|っていって)/i
+        function.say(contents)
+      when /(Ω|オーム)/
+        function.color_encode(contents)
+      when /(黒|茶|赤|橙|黄|緑|青|紫|灰|白|金|銀)/
+        function.color_decode(contents)
+      else # どのキーワードにも当てはまらなかったら
+        function.conversation(contents)
+      end
 
     raise PostError.new('cannot reply, no text') if rep_text.nil? || rep_text.empty?
     return rep_text if rep_text
@@ -67,7 +54,7 @@ class Function
   # OEbotを呼び出す
   def call(contents)
     text = nil
-    text = "はい。" if contents =~ /^(おーいー|oe|OE)(_||\s)(BOT|Bot|bot|ボット|ﾎﾞｯﾄ|ぼっと)$/
+    text = "はい。" if contents =~ /^(oe|おーいー)(_||\s)(bot|ボット|ﾎﾞｯﾄ|ぼっと)$/
     return text
   end
 
@@ -172,7 +159,7 @@ class Function
   # OpenJTalkでしゃべらせる
   def say(contents)
     contents = contents.gsub(/@\w*/,"")
-    contents = contents.sub(/(say|Say|って言って|っていって)/,"")
+    contents = contents.sub(/(say|って言って|っていって)/i,"")
     contents = contents.gsub(/(\s|　|\(|\)|\||{|}|&|;|`|\$|emacs|rm|SHELL|irb)/,"")
     if !contents.empty? && !contents.nil?
       text = "「#{contents}」って言いました。"
@@ -219,7 +206,8 @@ class Function
 
   # 入室
   def in(id:nil)
-    command = "paplay ./voice/#{$okaeri.sample}"
+    okaeri = ["okaeri1.wav","okaeri2.wav","okaeri3.wav","okaeri4.wav"]
+    command = "paplay ./voice/#{okaeri.sample}"
     system(command)
     name = User.find(id).name
     text = "#{name}が入室しました。"

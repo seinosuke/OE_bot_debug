@@ -6,10 +6,10 @@ require "../lib/card.rb"
 oebot = Bot.new()
 function = Function.new()
 
-mode = ARGV[0]
 debug = false
-if mode == "debug"
-  debug = true
+OptionParser.new do |opt|
+  opt.on('-d', '--debug','Switch to debug mode'){|v| debug = v}
+  opt.parse!(ARGV)
 end
 
 # 登録用
@@ -31,9 +31,7 @@ begin
   loop do
 
     system("clear")
-    if debug
-      puts "debugモードです"
-    end
+    puts "debug mode" if debug
 
     puts "ฅ(๑'Δ'๑) カードを置いてください。"
 

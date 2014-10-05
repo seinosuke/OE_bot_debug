@@ -6,12 +6,14 @@ require '../lib/function/function.rb'
 oebot = Bot.new(mention:true)
 function = Function.new
 
-mode = ARGV[0]
 debug = false
-if mode == "debug"
-  debug = true
-  puts "debugモードです"
+OptionParser.new do |opt|
+  opt.on('-d', '--debug','Switch to debug mode'){|v| debug = v}
+  opt.parse!(ARGV)
 end
+
+system("clear")
+puts "debug mode" if debug
 puts "ready!"
 
 begin

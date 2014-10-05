@@ -25,15 +25,15 @@ begin
 
     not_RT = status.retweeted_status.nil?
     isMention = status.user_mentions.any? { |user| user.screen_name == oebot.name }
-    isReply = /^@\w*/.match(contents)
+    isReply = contents.match(/^@\w*/)
 
     # リツイート以外を取得
     if not_RT
 
       # OEbotを呼び出す(他人へのリプを無視)
       if !isReply
-        if contents =~ /(oe|おーいー)(_||\s)(bot|ボット|ﾎﾞｯﾄ|ぼっと)/i
-          rep_text = function.call(contents)
+        if contents.match(oebot.rep_table['self'][0])
+          rep_text = function.call(contents,table:oebot.rep_table)
           oebot.post(rep_text,twitter_id:twitter_id,status_id:status_id) if rep_text
           oebot.fav(status_id:status_id)
         end

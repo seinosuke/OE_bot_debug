@@ -4,7 +4,6 @@ require 'open3'
 require_relative "./esysPinger.rb"
 require_relative "./gacha.rb"
 require_relative "./color_code.rb"
-require_relative "./talk.rb"
 
 require_relative "../database/botuser.rb"
 require_relative "../bot.rb"
@@ -36,7 +35,7 @@ class Function
       when /(黒|茶|赤|橙|黄|緑|青|紫|灰|白|金|銀)/
         function.color_decode(contents)
       else # どのキーワードにも当てはまらなかったら
-        function.conversation(contents)
+        function.conversation(contents,table:oebot.rep_table)
       end
 
     raise PostError.new('cannot reply, no text') if rep_text.nil? || rep_text.empty?
@@ -52,9 +51,9 @@ class Function
   #
 
   # OEbotを呼び出す
-  def call(contents)
+  def call(contents,table:nil)
     text = nil
-    text = "はい。" if contents =~ /^(oe|おーいー)(_||\s)(bot|ボット|ﾎﾞｯﾄ|ぼっと)$/i
+    text = table['call'][1].sample if contents.match(table['call'][0])
     return text
   end
 
@@ -194,9 +193,24 @@ class Function
     return text
   end
 
-  # どのキーワードにも当てはまらなかったら (talk.rb)
-  def conversation(contents)
-    text = talk(contents)
+  # どのキーワードにも当てはまらなかったら
+  def conversation(contents,table:nil)
+    text = nil
+    catch(:exit) do
+      if contents.match(table['self'][0])
+        text = table['self'][1].sample
+        throw :exit
+      end
+
+      table['comprehensible'].each do |row|
+        if row[0].any? {|keyword| contents.index(keyword) }
+          text = row[1].sample
+          throw :exit
+        end
+      end
+    end
+
+    text ||= table['incomprehensible'].sample
     return text
   end
 

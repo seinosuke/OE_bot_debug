@@ -7,7 +7,7 @@ require 'tweetstream'
 class Bot
   attr_accessor \
     :debug, :config,
-    :name,
+    :rep_table,:name,
     :client, :timeline
 
   def initialize(debug:false,mention:false)
@@ -15,6 +15,7 @@ class Bot
     @debug = debug
     @config = YAML.load_file('../lib/config.yml')
 
+    @rep_table = @config['ReplayTable']
     @name = @debug ? @config['name_debug'] : @config['name']
 
     oauth = @debug ? 'oauth_debug' : 'oauth'

@@ -5,24 +5,32 @@ require 'twitter'
 require 'tweetstream'
 
 class Bot
-  attr_accessor :client, :timeline
+  attr_accessor \
+    :config, :name,
+    :client, :timeline
 
-  def initialize(reply:false)
+  def initialize(mention:false)
 
-    keys = YAML.load_file('../list/config_debug.yml')
+    @config = YAML.load_file('../lib/config.yml')
+
+    @CONSUMER_KEY =       @config['oauth_debug']['consumer_key']
+    @CONSUMER_SECRET =    @config['oauth_debug']['consumer_secret']
+    @OAUTH_TOEKN =        @config['oauth_debug']['oauth_token']
+    @OAUTH_TOEKN_SECRET = @config['oauth_debug']['oauth_token_secret']
+
     @client = Twitter::REST::Client.new do |config|
-      config.consumer_key = keys["consumer_key"]
-      config.consumer_secret = keys["consumer_secret"]
-      config.access_token = keys["oauth_token"]
-      config.access_token_secret = keys["oauth_token_secret"]
+      config.consumer_key =        @CONSUMER_KEY
+      config.consumer_secret =     @CONSUMER_SECRET
+      config.access_token =        @OAUTH_TOEKN
+      config.access_token_secret = @OAUTH_TOEKN_SECRET
     end
 
-    if reply then
+    if mention then
       TweetStream.configure do |config|
-        config.consumer_key = keys["consumer_key"]
-        config.consumer_secret = keys["consumer_secret"]
-        config.oauth_token = keys["oauth_token"]
-        config.oauth_token_secret = keys["oauth_token_secret"]
+        config.consumer_key =       @CONSUMER_KEY
+        config.consumer_secret =    @CONSUMER_SECRET
+        config.oauth_token =        @OAUTH_TOEKN
+        config.oauth_token_secret = @OAUTH_TOEKN_SECRET
         config.auth_method = :oauth
       end
       @timeline = TweetStream::Client.new

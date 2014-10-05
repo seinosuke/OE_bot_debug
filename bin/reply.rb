@@ -3,7 +3,7 @@
 
 require '../lib/function/function.rb'
 
-oebot = Bot.new(reply:true)
+oebot = Bot.new(mention:true)
 function = Function.new
 
 mode = ARGV[0]
@@ -39,7 +39,7 @@ begin
 
       # 自分へのリプであれば
       if isMention
-        rep_text = Function.generate_reply(contents,twitter_id:twitter_id,debug:debug)
+        rep_text = Function.generate_reply(contents,oebot.config,twitter_id:twitter_id,debug:debug)
         oebot.post(rep_text,twitter_id:twitter_id,status_id:status_id,debug:debug) if rep_text
       end
 

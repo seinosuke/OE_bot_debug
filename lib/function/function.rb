@@ -13,7 +13,7 @@ PostError = Class.new(StandardError)
 
 class Function
 
-  def Function::generate_reply(contents = "",twitter_id:nil,debug:nil)
+  def Function::generate_reply(contents = "",config,twitter_id:nil,debug:nil)
     function = new
 
     rep_text = case contents
@@ -28,7 +28,7 @@ class Function
       when /(計算機室|機室|きしつ)/
         function.esys_pinger()
       when /L棟(パン|ぱん)(ガチャ|がちゃ)/
-        function.ltou_gacha()
+        function.ltou_gacha(config['buns_list'])
       when /(say|って言って|っていって)/i
         function.say(contents)
       when /(Ω|オーム)/
@@ -149,8 +149,8 @@ class Function
   end
 
   # L棟パンガチャ (gacha.rb)
-  def ltou_gacha()
-    gacha = Gacha.new()
+  def ltou_gacha(buns_list)
+    gacha = Gacha.new(buns_list)
     bun = gacha.buns_gacha()
     text = "本日のL棟パンは#{bun}です。"
     return text

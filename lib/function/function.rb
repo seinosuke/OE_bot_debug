@@ -13,7 +13,7 @@ PostError = Class.new(StandardError)
 
 class Function
 
-  def Function::generate_reply(contents = "",config,twitter_id:nil,debug:nil)
+  def Function::generate_reply(contents = "",oebot,twitter_id:nil)
     function = new
 
     rep_text = case contents
@@ -22,13 +22,13 @@ class Function
       when /(記録|きろく)/
         function.record(twitter_id:twitter_id)
       when /(退室|たいしつ|退出|たいしゅつ)/
-        function.rep_exit(twitter_id:twitter_id,debug:debug)
+        function.rep_exit(oebot,twitter_id:twitter_id)
       when /ping/i
         function.ping()
       when /(計算機室|機室|きしつ)/
         function.esys_pinger()
       when /L棟(パン|ぱん)(ガチャ|がちゃ)/
-        function.ltou_gacha(config['buns_list'])
+        function.ltou_gacha(oebot.config['buns_list'])
       when /(say|って言って|っていって)/i
         function.say(contents)
       when /(Ω|オーム)/
@@ -106,7 +106,7 @@ class Function
   end
 
   # リプで退室する
-  def rep_exit(twitter_id:"",debug:false)
+  def rep_exit(oebot,twitter_id:"")
 
     if User.find_by_twitter_id(twitter_id)
       user = BotUser.new(twitter_id:twitter_id)
@@ -115,7 +115,7 @@ class Function
         user.exit(time)
         staying_time = time_to_str(Condition.sum_time(id:user.id))
         text = self.out(id:user.id,staying_time:staying_time)
-        Bot.new.post(text,debug:debug) if text
+        oebot.post(text) if text
         text = "退室処理が完了しました。"
       else
         text = "あなたは部屋にいません。"

@@ -3,14 +3,14 @@
 
 require "../lib/card.rb"
 
-oebot = Bot.new()
-function = Function.new()
-
 debug = false
 OptionParser.new do |opt|
   opt.on('-d', '--debug','Switch to debug mode'){|v| debug = v}
   opt.parse!(ARGV)
 end
+
+oebot = Bot.new(debug:debug)
+function = Function.new()
 
 # 登録用
 def to_entry(oebot,card_id,debug)
@@ -24,7 +24,7 @@ def to_entry(oebot,card_id,debug)
   command = "paplay ./voice/entry.wav"
   system(command)
   rep_text = "ようこそ、#{name}さん!フォローにはしばらく時間がかかることがあるかもです。"
-  oebot.post(rep_text,twitter_id:twitter_id,debug:debug)
+  oebot.post(rep_text,twitter_id:twitter_id)
 end
 
 begin
@@ -53,12 +53,12 @@ begin
       if !staytus
         user.entrance(time)
         text = function.in(id:id)
-        oebot.post(text,debug:debug) if text
+        oebot.post(text) if text
       else
         user.exit(time)
         staying_time = time_to_str(Condition.sum_time(id:id))
         text = function.out(id:id,staying_time:staying_time)
-        oebot.post(text,debug:debug) if text
+        oebot.post(text) if text
       end
 
     # idが見つからない場合（未登録）

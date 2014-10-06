@@ -4,8 +4,10 @@
 require "../lib/card.rb"
 
 debug = false
+pasori = true
 OptionParser.new do |opt|
   opt.on('-d', '--debug','Switch to debug mode'){|v| debug = v}
+  opt.on('--[no-]pasori','Select whether to use PaSoRi or not'){|v| pasori = v}
   opt.parse!(ARGV)
 end
 
@@ -35,14 +37,17 @@ begin
 
     puts "ฅ(๑'Δ'๑) カードを置いてください。"
 
-    card_id = STDIN.gets.to_s.chomp
-    id = Card::debug(card_id)
-
-    # card = Card.new()
-    # card_id = card.idnum
-    # id = card.user_id(card_id)
-    # card.pasori.close
-    # card.felica.close
+    # PaSoRiがない場合番号を手動入力する
+    if pasori
+      card = Card.new()
+      card_id = card.idnum
+      id = card.user_id(card_id)
+      card.pasori.close
+      card.felica.close
+    else
+      card_id = STDIN.gets.to_s.chomp
+      id = Card::debug(card_id)
+    end
 
     # idが既にある場合（登録済み）
     if id

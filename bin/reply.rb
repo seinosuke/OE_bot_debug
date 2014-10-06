@@ -10,7 +10,6 @@ OptionParser.new do |opt|
 end
 
 oebot = Bot.new(debug:debug,mention:true)
-function = Function.new
 
 system("clear")
 puts "debug mode" if debug
@@ -33,7 +32,7 @@ begin
       # OEbotを呼び出す(他人へのリプを無視)
       if !isReply
         if contents.match(oebot.rep_table['self'][0])
-          rep_text = function.call(contents,table:oebot.rep_table)
+          rep_text = Function.call(contents,table:oebot.rep_table)
           oebot.post(rep_text,twitter_id:twitter_id,status_id:status_id) if rep_text
           oebot.fav(status_id:status_id)
         end

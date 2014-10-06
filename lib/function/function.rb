@@ -10,32 +10,33 @@ require_relative "../bot.rb"
 
 PostError = Class.new(StandardError)
 
-class Function
+module Function
 
-  def Function::generate_reply(contents = "",oebot,twitter_id:nil)
-    function = new
+  include ColorCode
+
+  def generate_reply(contents = "",oebot,twitter_id:nil)
 
     rep_text = case contents
       when /(誰か|だれか|誰が|だれが|おるか)/
-        function.being()
+        being()
       when /(記録|きろく)/
-        function.record(twitter_id:twitter_id)
+        record(twitter_id:twitter_id)
       when /(退室|たいしつ|退出|たいしゅつ)/
-        function.rep_exit(oebot,twitter_id:twitter_id)
+        rep_exit(oebot,twitter_id:twitter_id)
       when /ping/i
-        function.ping()
+        ping()
       when /(計算機室|機室|きしつ)/
-        function.esys_pinger()
+        esys_pinger()
       when /L棟(パン|ぱん)(ガチャ|がちゃ)/
-        function.ltou_gacha(oebot.config['buns_list'])
+        ltou_gacha(oebot.config['buns_list'])
       when /(say|って言って|っていって)/i
-        function.say(contents)
+        say(contents)
       when /(Ω|オーム)/
-        function.color_encode(contents)
+        cc_encode(contents)
       when /(黒|茶|赤|橙|黄|緑|青|紫|灰|白|金|銀)/
-        function.color_decode(contents)
+        cc_decode(contents)
       else # どのキーワードにも当てはまらなかったら
-        function.conversation(contents,table:oebot.rep_table)
+        conversation(contents,table:oebot.rep_table)
       end
 
     raise PostError.new('cannot reply, no text') if rep_text.nil? || rep_text.empty?
@@ -113,7 +114,7 @@ class Function
         time = Time.now + 60*60*9
         user.exit(time)
         staying_time = time_to_str(Condition.sum_time(id:user.id))
-        text = self.out(id:user.id,staying_time:staying_time)
+        text = out(id:user.id,staying_time:staying_time)
         oebot.post(text) if text
         text = "退室処理が完了しました。"
       else
@@ -171,15 +172,15 @@ class Function
   end
 
   # 抵抗値 -> カラーコード (color_code.rb)
-  def color_encode(contents)
+  def cc_encode(contents)
     contents = contents.gsub(/@\w*/,"")
     contents = contents.gsub(/(Ω|オーム|\s|　)/,"")
-    text = c_encode(contents)
+    text = ColorCode.encode(contents)
     return text
   end
 
   # カラーコード -> 抵抗値 (color_code.rb)
-  def color_decode(contents)
+  def cc_decode(contents)
     contents = contents.gsub(/@\w*/,"")
     contents = contents.gsub(/(\s|　|,|、)/,"")
     text = nil
@@ -187,7 +188,7 @@ class Function
       contents.split("").each do |color|
         throw :error unless color =~ /(黒|茶|赤|橙|黄|緑|青|紫|灰|白|金|銀)/
       end
-      text = c_decode(contents)
+      text = ColorCode.decode(contents)
     end
     text ||= self.conversation(contents)
     return text
@@ -236,6 +237,14 @@ class Function
     text = "#{name}が退室しました。\n滞在時間は#{staying_time}です。"
     return text
   end
+
+  module_function \
+    :generate_reply,
+    :call,
+    :being,:record,:rep_exit,:ping,:esys_pinger,:ltou_gacha,:say,
+    :cc_encode,:cc_decode,
+    :conversation,
+    :in, :out
 
 end
 

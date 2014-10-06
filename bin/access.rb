@@ -12,7 +12,6 @@ OptionParser.new do |opt|
 end
 
 oebot = Bot.new(debug:debug)
-function = Function.new()
 
 # 登録用
 def to_entry(oebot,card_id,debug)
@@ -57,12 +56,12 @@ begin
 
       if !staytus
         user.entrance(time)
-        text = function.in(id:id)
+        text = Function.in(id:id)
         oebot.post(text) if text
       else
         user.exit(time)
         staying_time = time_to_str(Condition.sum_time(id:id))
-        text = function.out(id:id,staying_time:staying_time)
+        text = Function.out(id:id,staying_time:staying_time)
         oebot.post(text) if text
       end
 
